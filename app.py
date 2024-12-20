@@ -10,13 +10,14 @@ import io
 import os
 import datetime as dt
 import datetime
+from flask import Flask
 today = dt.date.today()
 last_7_days = today - dt.timedelta(days=7)
 last_month = today - dt.timedelta(days=30)
 
 # Initialize Dash app
 server = Flask(__name__)
-app = dash.Dash(__name__, server=server)
+app = dash.Dash(__name__, server=server, routes_pathname_prefix='/')
 
 
 # initialy create directory 
@@ -495,6 +496,6 @@ def update_visuals(selected_clusters, selected_crime_types, start_date, end_date
     return map_fig, bar_fig, trend_fig, monthly_crime_text, common_crime, affected_area
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))  # Use the PORT variable Render provides
-    app.run_server(debug=False, host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 8080))  # Use Render's provided port
+    app.run_server(host='0.0.0.0', port=port)
 
