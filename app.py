@@ -41,7 +41,6 @@ start_date = last_date - datetime.timedelta(days=7)
 app.layout = html.Div([
 
     html.Div([
-        html.Img(src='/assets/pincrimelogo.png', style={'height': '50px', 'width': '10%', 'marginRight': '10px'}),
         html.H1("Crime Data Analysis Dashboard", style={'textAlign': 'center'}),
         html.P("Explore crime patterns and clusters using data visualizations.",
                style={'textAlign': 'center', 'color': 'gray'})
