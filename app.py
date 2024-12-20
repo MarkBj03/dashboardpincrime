@@ -16,7 +16,7 @@ last_month = today - dt.timedelta(days=30)
 
 # Initialize Dash app
 app = dash.Dash(__name__)
-server = app.server
+
 
 # initialy create directory 
 if not os.path.exists('uploaded_files'):
@@ -493,6 +493,4 @@ def update_visuals(selected_clusters, selected_crime_types, start_date, end_date
 
     return map_fig, bar_fig, trend_fig, monthly_crime_text, common_crime, affected_area
 
-
-if __name__ == '__main__':
-    app.run_server(debug=True,port = 8050)
+server = app.server
