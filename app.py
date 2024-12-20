@@ -15,7 +15,8 @@ last_7_days = today - dt.timedelta(days=7)
 last_month = today - dt.timedelta(days=30)
 
 # Initialize Dash app
-app = dash.Dash(__name__)
+server = Flask(__name__)
+app = dash.Dash(__name__, server=server)
 
 
 # initialy create directory 
@@ -493,4 +494,7 @@ def update_visuals(selected_clusters, selected_crime_types, start_date, end_date
 
     return map_fig, bar_fig, trend_fig, monthly_crime_text, common_crime, affected_area
 
-server = app.server
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))  # Use the PORT variable Render provides
+    app.run_server(debug=False, host="0.0.0.0", port=port)
+
