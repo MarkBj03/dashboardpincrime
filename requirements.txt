@@ -93,3 +93,4 @@ Werkzeug==3.0.4
 yarg==0.1.10
 yolk3k==0.9
 zipp==3.21.0
+waitress==3.0.2
