@@ -37,6 +37,14 @@ data['Month'] = data['DATE COMMITTED'].dt.month
 data['Day'] = data['DATE COMMITTED'].dt.day
 last_date = data['DATE COMMITTED'].max().date()
 start_date = last_date - datetime.timedelta(days=7)
+cluster_names = {
+    0: "Rizal",
+    1: "Batangas",
+    2: "Quezon",
+    3: "Calambe",
+    4: "Laguna"
+}
+
 # App Layout
 app.layout = html.Div([
 
@@ -50,13 +58,14 @@ app.layout = html.Div([
     html.Div([
         html.Div([
             html.Label("Select Cluster:",style={'font-family': 'Arial, sans-serif',}),
-            dcc.Dropdown(
-                id='cluster-filter',
-                options=[{'label': f'Cluster {i}', 'value': i} for i in sorted(data['Cluster'].unique())],
-                value=None,
-                placeholder="Select a cluster",
-                multi=True
-            )
+                dcc.Dropdown(
+                    id='cluster-filter',
+                    options=[{'label': cluster_names[i], 'value': i} for i in sorted(data['Cluster'].unique())],
+                    value=None,
+                    placeholder="Select a cluster",
+                    multi=True
+                )
+
         ], style={'width': '30%', 'display': 'inline-block', 'padding': '10px','font-family': 'Arial, sans-serif', 'font-size': '14px'}),
 
         html.Div([
@@ -397,12 +406,12 @@ def update_visuals(selected_clusters, selected_crime_types, start_date, end_date
 
     # Map visualization
     map_fig = px.scatter_mapbox(
-        filtered_data, 
-        lat='LATITUDE', 
-        lon='LONGITUDE', 
-        color='Cluster',
-        mapbox_style="carto-positron", 
-        zoom=10, 
+        filtered_data,
+        lat='LATITUDE',
+        lon='LONGITUDE',
+        color=filtered_data['Cluster'].map(cluster_names),  # Map cluster IDs to names
+        mapbox_style="carto-positron",
+        zoom=10,
         title="Crime Clusters"
     )
     map_fig.update_layout(
@@ -410,8 +419,10 @@ def update_visuals(selected_clusters, selected_crime_types, start_date, end_date
             style="carto-positron",
             zoom=10,
             center=dict(lat=filtered_data['LATITUDE'].mean(), lon=filtered_data['LONGITUDE'].mean())
-        )
+        ),
+        legend_title="Clusters",  # Add title for the legend
     )
+
     
 
     # Bar chart for crime types
@@ -497,4 +508,3 @@ def update_visuals(selected_clusters, selected_crime_types, start_date, end_date
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))  # Use Render's provided port
     app.run_server(host='0.0.0.0', port=port)
-
